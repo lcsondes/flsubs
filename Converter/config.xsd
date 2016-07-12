@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2014, 2015, 2016 László József Csöndes
+  
+  This file is part of FLSubs.
+  
+  FLSubs is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  FLSubs is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with FLSubs.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xs:schema id="subtitles"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+>
+  <xs:simpleType name="alignment">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Leading"/>
+      <xs:enumeration value="Trailing"/>
+      <xs:enumeration value="Center"/>
+      <xs:enumeration value="Justified"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="textarea">
+    <xs:all>
+      <xs:element name="Font">
+        <xs:complexType>
+          <xs:attribute name="Size" type="xs:float" use="required"/>
+          <xs:attribute name="Alignment" type="alignment" use="optional" default="Leading"/>
+          <xs:attribute name="Family" type="xs:token" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="Enabled" type="xs:boolean" use="optional" default="true"/>
+    <xs:attribute name="Direct" type="xs:boolean" use="optional" default="false"/>
+    <xs:attribute name="X" type="xs:unsignedInt" use="required"/>
+    <xs:attribute name="Y" type="xs:unsignedInt" use="required"/>
+    <xs:attribute name="Width" type="xs:unsignedInt" use="required"/>
+    <xs:attribute name="Height" type="xs:unsignedInt" use="required"/>
+  </xs:complexType>
+  
+  <xs:element name="Config">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Screen">
+          <xs:complexType>
+            <xs:attribute name="Width" type="xs:unsignedInt" use="required"/>
+            <xs:attribute name="Height" type="xs:unsignedInt" use="required"/>
+            <xs:attribute name="DPI" type="xs:float" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TextAreas">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="Debug" type="textarea"/>
+              <xs:element name="Cinematic" type="textarea"/>
+              <xs:element name="Ingame" type="textarea"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

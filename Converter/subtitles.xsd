@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2014, 2015, 2016 László József Csöndes
+  
+  This file is part of FLSubs.
+  
+  FLSubs is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  FLSubs is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with FLSubs.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xs:schema id="subtitles"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+>
+  <xs:simpleType name="audiofile">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[^|]+(\|0x[0-9A-F]{8})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="hack">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Streamed"/> <!-- Indicates that the sound file is streamed -->
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="textarea">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Debug"/>     <!-- 0 -->
+      <xs:enumeration value="Cinematic"/> <!-- 1 -->
+      <xs:enumeration value="Ingame"/>    <!-- 2 -->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="time">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="([0-9]+:){0,2}[0-9]+(.[0-9]{1,3})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="content">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+  
+  <xs:simpleType name="partcontent">
+    <xs:restriction base="xs:token"/>
+  </xs:simpleType>
+
+  <xs:attributeGroup name="entryattr">
+    <xs:attribute name="AudioFile" type="audiofile" use="required"/>
+    <xs:attribute name="Hack" type="hack" use="optional"/>
+    <xs:attribute name="TextArea" type="textarea" use="required"/>
+  </xs:attributeGroup>
+
+  <xs:element name="Subtitles">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="Static">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="content">
+                <xs:attributeGroup ref="entryattr"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Dynamic">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+              <xs:element name="Part">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="partcontent">
+                      <xs:attribute name="Start" type="time" use="required"/>
+                      <xs:attribute name="End" type="time" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="entryattr"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
